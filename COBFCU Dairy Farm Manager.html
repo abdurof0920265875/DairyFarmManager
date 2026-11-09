@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>COBFCU Dairy Farm Manager</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐄%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F6F2;--surf:#fff;--ink:#17231C;--mute:#5B6B61;--line:#D8E0D9;--g:#17432F;--g2:#2F7A52;--gold:#B8860B;--red:#B3322A;--ok:#2F7A52;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1713;--surf:#17221C;--ink:#E8EFEA;--mute:#93A59A;--line:#2B3A31;--g:#7FD0A0;--g2:#5DBB86;--gold:#E0B64A;--red:#F07A70;--ok:#5DBB86}}
+:root[data-theme="dark"]{--bg:#0F1713;--surf:#17221C;--ink:#E8EFEA;--mute:#93A59A;--line:#2B3A31;--g:#7FD0A0;--g2:#5DBB86;--gold:#E0B64A;--red:#F07A70;--ok:#5DBB86}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 "Source Sans 3",system-ui,sans-serif;padding-bottom:84px}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;margin:0;letter-spacing:-.01em}
+header{padding:18px 16px 6px;max-width:820px;margin:auto}
+header h1{font-size:22px}header p{margin:2px 0 0;color:var(--mute);font-size:14px}
+main{max-width:820px;margin:auto;padding:8px 16px 24px}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--surf);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
+nav button{flex:1;max-width:120px;background:none;border:0;color:var(--mute);font:600 12px "Source Sans 3",sans-serif;padding:6px 2px;border-radius:8px;cursor:pointer}
+nav button .i{display:block;font-size:20px}
+nav button[aria-current=page]{color:var(--g);background:color-mix(in srgb,var(--g2) 14%,transparent)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:14px;margin:12px 0}
+.card h2{font-size:17px;margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{border-left:4px solid var(--g2);padding:6px 10px;background:var(--surf);border-radius:4px 10px 10px 4px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.kpi.bad{border-left-color:var(--red)}.kpi.warn{border-left-color:var(--gold)}
+.kpi b{display:block;font:700 26px "Bricolage Grotesque",sans-serif}
+.kpi span{font-size:13px;color:var(--mute)}.kpi small{display:block;font-size:12px;color:var(--mute)}
+form{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;align-items:end}
+label{font-size:13px;color:var(--mute);display:block}
+input,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.btn{background:var(--g);color:var(--bg);border:0;border-radius:8px;padding:11px 14px;font:600 15px "Source Sans 3",sans-serif;cursor:pointer}
+:root:not([data-theme="dark"]) .btn{color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn{color:#0F1713}}
+.btn.ghost{background:none;color:var(--g);border:1px solid var(--line)}
+.btn.sm{padding:5px 9px;font-size:13px}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--mute);font-weight:600}
+.pill{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;border:1px solid var(--line)}
+.pill.ok{color:var(--ok);border-color:var(--ok)}.pill.bad{color:var(--red);border-color:var(--red)}.pill.warn{color:var(--gold);border-color:var(--gold)}
+.bars{display:flex;align-items:flex-end;gap:4px;height:110px}
+.bars div{flex:1;background:var(--g2);border-radius:3px 3px 0 0;min-height:2px;position:relative}
+.bars div span{position:absolute;bottom:-18px;left:0;right:0;text-align:center;font-size:10px;color:var(--mute)}
+.meter{height:8px;background:var(--line);border-radius:4px;overflow:hidden}.meter i{display:block;height:100%;background:var(--g2)}.meter i.over{background:var(--red)}
+.row{display:flex;justify-content:space-between;gap:8px;align-items:center;margin:8px 0;font-size:14px}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line)}
+.chk input{width:22px;height:22px;margin-top:1px;flex:none}
+.muted{color:var(--mute);font-size:14px}
+.empty{padding:16px;text-align:center;color:var(--mute)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:14px;z-index:9}
+</style>
+</head>
+<body>
+<header><h1>Dairy Farm Manager</h1><p>Chercher Oda Bultum Farmers Cooperative Union · 2019 EFY (2026/27)</p></header>
+<main id="app"></main>
+<nav id="nav"></nav>
+<script>
+const FY=2019,VAX=["Lumpy Skin Disease","Foot and Mouth Disease","Blackleg","Anthrax","Pasteurellosis","CBPP","Rabies","Brucellosis"];
+const CATS=["Lactating cow","Dry cow","Pregnant cow","Heifer","Female calf","Male calf","Bull"];
+const BUD=[["Feed and Nutrition",40],["Labor and Staff Benefits",20],["Veterinary and Breeding",10],["Forage Production",10],["Utilities",5],["Repairs and Maintenance",5],["Marketing and Value Addition",3],["Administration",3],["Monitoring and Training",2],["Environmental and Social",2]];
+const QS=[["Q1 · July–September",["Approve annual work plan","Procure feed","Prepare forage land","Routine vaccination","Artificial insemination","Staff orientation","Monthly supervision and financial report"]],
+["Q2 · October–December",["Harvest forage and make hay","Prepare silage before the dry season","Pregnancy diagnosis","Disease surveillance","Marketing promotion","Quarterly performance review","Staff technical training"]],
+["Q3 · January–March",["Manage feed reserves","Routine breeding","Veterinary services","Environmental inspection","Customer satisfaction survey","Internal financial review","Infrastructure maintenance"]],
+["Q4 · April–June",["Annual herd assessment","Financial performance evaluation","Annual milk production analysis","Staff performance appraisal","Budget review","Annual M&E report","Prepare next year's work plan"]]];
+const today=()=>new Date().toISOString().slice(0,10);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=n=>Number(n||0).toLocaleString("en-US",{maximumFractionDigits:1});
+const daysAgo=d=>(Date.now()-new Date(d))/864e5;
+let S,tab="home";
+function seed(){const d=n=>new Date(Date.now()-n*864e5).toISOString().slice(0,10);
+ const A=[["C001","Lactating cow","Holstein cross",d(1800)],["C002","Lactating cow","Holstein cross",d(2100)],["C003","Lactating cow","Jersey cross",d(1500)],["C004","Dry cow","Holstein cross",d(2400)],["C005","Pregnant cow","Jersey cross",d(1700)],["H001","Heifer","Holstein cross",d(700)],["K001","Female calf","Holstein cross",d(90)],["K002","Male calf","Holstein cross",d(60)]];
+ const animals=A.map(a=>({id:a[0],cat:a[1],breed:a[2],dob:a[3],status:"Active"}));
+ const milk=[];for(let i=13;i>=0;i--)["C001","C002","C003"].forEach((c,j)=>milk.push({date:d(i),id:c,am:8+j+(i%3),pm:6+j+(i%2)}));
+ return{sample:true,animals,milk,health:[{date:d(40),id:"C001",type:"Vaccination",detail:"Lumpy Skin Disease"},{date:d(40),id:"C002",type:"Vaccination",detail:"Lumpy Skin Disease"},{date:d(30),id:"C001",type:"AI",detail:"Pregnant"},{date:d(30),id:"C003",type:"AI",detail:"Open"},{date:d(20),id:"C002",type:"AI",detail:"Pregnant"}],
+ budget:{total:2000000,price:45},spend:[],income:[],done:{}}}
+function load(){try{S=JSON.parse(localStorage.getItem("cobfcu_dairy_v1"))}catch(e){}if(!S)S=seed()}
+function save(){try{localStorage.setItem("cobfcu_dairy_v1",JSON.stringify(S))}catch(e){}}
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),1800)}
+const live=()=>S.animals.filter(a=>a.status==="Active");
+
+function kpis(){
+ const m7=S.milk.filter(r=>daysAgo(r.date)<=7),tot=m7.reduce((s,r)=>s+r.am+r.pm,0);
+ const perCow=m7.length?tot/m7.length:0;
+ const ai=S.health.filter(h=>h.type==="AI"&&h.detail!=="Pending"),preg=ai.filter(h=>h.detail==="Pregnant").length;
+ const conc=ai.length?preg/ai.length*100:null;
+ const calves=S.animals.filter(a=>/calf/.test(a.cat)),dead=calves.filter(a=>a.status==="Died").length;
+ const surv=calves.length?100-dead/calves.length*100:null;
+ const adults=S.animals.filter(a=>!/calf/.test(a.cat)),am=adults.length?adults.filter(a=>a.status==="Died").length/adults.length*100:null;
+ const L=live(),vc=L.length?VAX.slice(0,5).reduce((s,v)=>s+L.filter(a=>S.health.some(h=>h.id===a.id&&h.type==="Vaccination"&&h.detail===v&&daysAgo(h.date)<=365)).length/L.length,0)/5*100:null;
+ const rec=L.length?L.filter(a=>a.id&&a.breed&&a.dob&&a.cat).length/L.length*100:null;
+ const dw=L.length?L.filter(a=>S.health.some(h=>h.id===a.id&&h.type==="Deworming"&&daysAgo(h.date)<=92)).length/L.length*100:null;
+ return{perCow,tot,conc,surv,am,vc,rec,dw};
+}
+function kpi(label,val,target,ok,unit="%"){const v=val==null?"—":fmt(val)+unit;const c=val==null?"":ok?"":"warn";return `<div class="kpi ${c}"><span>${label}</span><b>${v}</b><small>Target ${target}</small></div>`}
+
+function home(){const k=kpis(),L=live();
+ const lac=L.filter(a=>a.cat==="Lactating cow").length;
+ const days=[...Array(7)].map((_,i)=>{const d=new Date(Date.now()-(6-i)*864e5).toISOString().slice(0,10);return[d,S.milk.filter(r=>r.date===d).reduce((s,r)=>s+r.am+r.pm,0)]});
+ const mx=Math.max(1,...days.map(d=>d[1]));
+ const due=L.flatMap(a=>VAX.slice(0,5).filter(v=>!S.health.some(h=>h.id===a.id&&h.type==="Vaccination"&&h.detail===v&&daysAgo(h.date)<=365)).map(v=>[a.id,v])).length;
+ const spent=S.spend.reduce((s,e)=>s+e.amt,0),inc=S.income.reduce((s,e)=>s+e.amt,0);
+ return `${S.sample?`<div class="card"><b>Sample data loaded.</b> <span class="muted">Replace it with your herd inventory.</span> <button class="btn sm ghost" onclick="clearSample()">Clear sample data</button></div>`:""}
+ <div class="grid">
+ <div class="kpi"><span>Active animals</span><b>${L.length}</b><small>${lac} lactating</small></div>
+ <div class="kpi"><span>Milk, last 7 days</span><b>${fmt(k.tot)} L</b><small>${fmt(k.perCow)} L per cow per day</small></div>
+ <div class="kpi ${due?"warn":""}"><span>Vaccinations due</span><b>${due}</b><small>animal–disease pairs</small></div>
+ <div class="kpi ${spent>S.budget.total?"bad":""}"><span>Net so far (ETB)</span><b>${fmt(inc-spent)}</b><small>Income ${fmt(inc)} · Spent ${fmt(spent)}</small></div></div>
+ <div class="card"><h2>Milk per day, last 7 days (L)</h2><div class="bars" style="margin-bottom:22px">${days.map(d=>`<div style="height:${d[1]/mx*100}%" title="${d[1]} L"><span>${d[0].slice(8)}</span></div>`).join("")}</div></div>
+ <h2 style="margin-top:18px">Plan targets</h2><div class="grid" style="margin-top:8px">
+ ${kpi("AI conception rate",k.conc,"≥ 60%",k.conc>=60)}${kpi("Calf survival",k.surv,"≥ 95%",k.surv>=95)}${kpi("Adult mortality",k.am,"< 2%",k.am<2)}
+ ${kpi("Vaccination coverage",k.vc,"100%",k.vc>=100)}${kpi("Deworming (last quarter)",k.dw,"100%",k.dw>=100)}${kpi("Complete records",k.rec,"100%",k.rec>=100)}</div>`}
+function clearSample(){if(confirm("Remove all sample animals and records?")){S={sample:false,animals:[],milk:[],health:[],budget:S.budget,spend:[],income:[],done:S.done};save();render()}}
+
+function herd(){const ids=live().map(a=>`<option>${esc(a.id)}</option>`).join("");
+ return `<div class="card"><h2>Add animal</h2><form onsubmit="addAnimal(event)"><div><label>Tag number</label><input name="id" required></div>
+ <div><label>Category</label><select name="cat">${CATS.map(c=>`<option>${c}</option>`).join("")}</select></div>
+ <div><label>Breed</label><input name="breed" required></div><div><label>Date of birth</label><input type="date" name="dob" required></div>
+ <button class="btn">Add animal</button></form></div>
+ <div class="card"><h2>Herd register</h2><div class="muted" style="margin-bottom:8px">${CATS.map(c=>c.replace(" cow","")+": "+S.animals.filter(a=>a.cat===c&&a.status==="Active").length).join(" · ")}</div>
+ ${S.animals.length?`<div class="scroll"><table><tr><th>Tag</th><th>Category</th><th>Breed</th><th>Born</th><th>Status</th><th></th></tr>${S.animals.map((a,i)=>`<tr><td><b>${esc(a.id)}</b></td><td>${a.cat}</td><td>${esc(a.breed)}</td><td>${a.dob}</td><td><span class="pill ${a.status==="Active"?"ok":"bad"}">${a.status}</span></td><td><select onchange="setStatus(${i},this.value)" aria-label="Change status of ${esc(a.id)}">${["Active","Sold","Culled","Died"].map(s=>`<option ${s===a.status?"selected":""}>${s}</option>`).join("")}</select></td></tr>`).join("")}</table></div>`:`<div class="empty">No animals yet. Add your first animal above to start the herd inventory.</div>`}</div>`}
+function addAnimal(e){e.preventDefault();const f=Object.fromEntries(new FormData(e.target));if(S.animals.some(a=>a.id===f.id)){toast("That tag already exists");return}S.animals.push({...f,status:"Active"});save();toast("Animal added");render()}
+function setStatus(i,v){S.animals[i].status=v;save();render()}
+
+function milk(){const ids=live().filter(a=>/cow/.test(a.cat)).map(a=>`<option>${esc(a.id)}</option>`).join("");
+ const byDay={};S.milk.forEach(r=>byDay[r.date]=(byDay[r.date]||0)+r.am+r.pm);
+ const rows=Object.entries(byDay).sort().reverse().slice(0,14);
+ return `<div class="card"><h2>Record milking</h2><form onsubmit="addMilk(event)"><div><label>Date</label><input type="date" name="date" value="${today()}" required></div>
+ <div><label>Cow</label><select name="id" required>${ids}</select></div><div><label>Morning (L)</label><input type="number" step="0.1" min="0" name="am" required></div><div><label>Evening (L)</label><input type="number" step="0.1" min="0" name="pm" required></div>
+ <button class="btn">Save record</button></form></div>
+ <div class="card"><h2>Daily totals</h2>${rows.length?`<div class="scroll"><table><tr><th>Date</th><th>Cows</th><th>Total (L)</th></tr>${rows.map(([d,t])=>`<tr><td>${d}</td><td>${S.milk.filter(r=>r.date===d).length}</td><td>${fmt(t)}</td></tr>`).join("")}</table></div>`:`<div class="empty">No milk records yet. Record the first milking above.</div>`}</div>`}
+function addMilk(e){e.preventDefault();const f=Object.fromEntries(new FormData(e.target));f.am=+f.am;f.pm=+f.pm;S.milk.push(f);save();toast("Record saved");render()}
+
+function health(){const ids=live().map(a=>`<option>${esc(a.id)}</option>`).join("");
+ return `<div class="card"><h2>Log health or breeding event</h2><form onsubmit="addHealth(event)"><div><label>Date</label><input type="date" name="date" value="${today()}" required></div>
+ <div><label>Animal</label><select name="id" required>${ids}</select></div><div><label>Event</label><select name="type" id="evt" onchange="evtChange()"><option>Vaccination</option><option>Deworming</option><option>AI</option><option>Treatment</option></select></div>
+ <div><label id="dl">Disease</label><span id="dv"><select name="detail">${VAX.map(v=>`<option>${v}</option>`).join("")}</select></span></div><button class="btn">Save event</button></form></div>
+ <div class="card"><h2>Vaccination status (last 12 months)</h2>${live().length?`<div class="scroll"><table><tr><th>Disease</th><th>Vaccinated</th><th>Coverage</th></tr>${VAX.map(v=>{const n=live().filter(a=>S.health.some(h=>h.id===a.id&&h.type==="Vaccination"&&h.detail===v&&daysAgo(h.date)<=365)).length,p=n/live().length*100;return `<tr><td>${v}</td><td>${n} / ${live().length}</td><td><span class="pill ${p>=100?"ok":p>0?"warn":"bad"}">${fmt(p)}%</span></td></tr>`}).join("")}</table></div>`:`<div class="empty">Add animals to track vaccination coverage.</div>`}</div>
+ <div class="card"><h2>Recent events</h2>${S.health.length?`<div class="scroll"><table><tr><th>Date</th><th>Animal</th><th>Event</th><th>Detail</th></tr>${[...S.health].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,15).map(h=>`<tr><td>${h.date}</td><td>${esc(h.id)}</td><td>${h.type}</td><td>${esc(h.detail)}</td></tr>`).join("")}</table></div>`:`<div class="empty">No events logged yet.</div>`}</div>`}
+function evtChange(){const t=document.getElementById("evt").value,dl=document.getElementById("dl"),dv=document.getElementById("dv");
+ if(t==="Vaccination"){dl.textContent="Disease";dv.innerHTML=`<select name="detail">${VAX.map(v=>`<option>${v}</option>`).join("")}</select>`}
+ else if(t==="AI"){dl.textContent="Pregnancy result";dv.innerHTML=`<select name="detail"><option>Pending</option><option>Pregnant</option><option>Open</option></select>`}
+ else{dl.textContent="Detail";dv.innerHTML=`<input name="detail" value="${t==="Deworming"?"Quarterly deworming":""}" required>`}}
+function addHealth(e){e.preventDefault();S.health.push(Object.fromEntries(new FormData(e.target)));save();toast("Event saved");render()}
+
+function money(){const B=S.budget,sp=S.spend.reduce((s,e)=>s+e.amt,0),inc=S.income.reduce((s,e)=>s+e.amt,0);
+ const by=c=>S.spend.filter(e=>e.cat===c).reduce((s,e)=>s+e.amt,0);
+ const be=B.price>0?Math.ceil(B.total/B.price):0;
+ return `<div class="card"><h2>Annual budget</h2><form onsubmit="setBudget(event)"><div><label>Total operating budget (ETB)</label><input type="number" name="total" min="0" value="${B.total}"></div><div><label>Milk price (ETB per litre)</label><input type="number" name="price" min="0" step="0.5" value="${B.price}"></div><button class="btn">Update budget</button></form>
+ <p class="muted">Break-even: sell about <b>${fmt(be)} L</b> of milk (${fmt(be/365)} L per day) to cover the full budget.</p></div>
+ <div class="card"><h2>Spending against the plan's budget shares</h2>${BUD.map(([c,p])=>{const al=B.total*p/100,u=by(c),r=al?u/al*100:0;return `<div style="margin:10px 0"><div class="row" style="margin:0 0 3px"><span>${c} (${p}%)</span><span>${fmt(u)} / ${fmt(al)}</span></div><div class="meter"><i class="${r>100?"over":""}" style="width:${Math.min(r,100)}%"></i></div></div>`}).join("")}</div>
+ <div class="card"><h2>Record expense</h2><form onsubmit="addMoney(event,'spend')"><div><label>Date</label><input type="date" name="date" value="${today()}" required></div><div><label>Category</label><select name="cat">${BUD.map(b=>`<option>${b[0]}</option>`).join("")}</select></div><div><label>Amount (ETB)</label><input type="number" name="amt" min="0" required></div><button class="btn">Save expense</button></form></div>
+ <div class="card"><h2>Record income</h2><form onsubmit="addMoney(event,'income')"><div><label>Date</label><input type="date" name="date" value="${today()}" required></div><div><label>Source</label><select name="cat"><option>Fresh milk sales</option><option>Bull sales</option><option>Breeding stock</option><option>Manure sales</option><option>Other</option></select></div><div><label>Amount (ETB)</label><input type="number" name="amt" min="0" required></div><button class="btn">Save income</button></form></div>
+ <div class="card"><h2>Position</h2><div class="row"><span>Income</span><b>${fmt(inc)}</b></div><div class="row"><span>Expenses</span><b>${fmt(sp)}</b></div><div class="row"><span>Operating profit</span><b style="color:${inc-sp<0?"var(--red)":"var(--ok)"}">${fmt(inc-sp)}</b></div></div>`}
+function setBudget(e){e.preventDefault();const f=new FormData(e.target);S.budget={total:+f.get("total"),price:+f.get("price")};save();toast("Budget updated");render()}
+function addMoney(e,k){e.preventDefault();const f=Object.fromEntries(new FormData(e.target));f.amt=+f.amt;S[k].push(f);save();toast("Saved");render()}
+
+function plan(){const q=Math.floor(((new Date().getMonth()+6)%12)/3);
+ return QS.map((Q,i)=>{const n=Q[1].filter((_,j)=>S.done[i+"-"+j]).length;return `<div class="card"><h2>${Q[0]} ${i===q?'<span class="pill warn">Current</span>':""}</h2><div class="muted">${n} of ${Q[1].length} done</div>${Q[1].map((t,j)=>`<label class="chk" style="color:var(--ink);font-size:16px"><input type="checkbox" ${S.done[i+"-"+j]?"checked":""} onchange="S.done['${i}-${j}']=this.checked;save();render()"><span>${t}</span></label>`).join("")}</div>`}).join("")}
+
+const TABS={home:["🏠","Overview",home],herd:["🐄","Herd",herd],milk:["🥛","Milk",milk],health:["💉","Health",health],money:["💰","Budget",money],plan:["📅","Plan",plan]};
+function render(){const y=window.scrollY;document.getElementById("app").innerHTML=TABS[tab][2]();
+ document.getElementById("nav").innerHTML=Object.entries(TABS).map(([k,v])=>`<button onclick="go('${k}')" ${k===tab?'aria-current="page"':""}><span class="i">${v[0]}</span>${v[1]}</button>`).join("");window.scrollTo(0,y)}
+function go(t){tab=t;render();window.scrollTo(0,0);try{location.hash=t}catch(e){}}
+load();const h=location.hash.slice(1);if(TABS[h])tab=h;render();
+</script>
+</body>
+</html>
